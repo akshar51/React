@@ -49,3 +49,19 @@
 // }
 // let obj = {...obj1,...obj2}
 // console.log(obj)
+
+// DESTRUCTURING
+//  For Object
+// let obj = {
+//     name : "hello",
+//     pass : "123",
+//     age : 21
+// }
+// const {pass} = obj;
+// console.log(pass)
+
+// For Array
+// let num = [1,2,3]
+// const [a,b]= num
+// console.log(a)
+// console.log(b)
