@@ -1,17 +1,20 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Card from './Component/Card'
 
 
 function App() {
 
   const [user,setUser] = useState([]);
-
-  fetch('https://fakestoreapi.com/products')
-  .then(response => response.json())
-  .then((data)=>{
-    console.log(data);
-    setUser(data)
-  });
+  useEffect(() => {
+    fetch('https://fakestoreapi.com/products')
+    .then(response => response.json())
+    .then((data)=>{
+      console.log(data);
+      setUser(data)
+    });
+  }, [])
+  
+  
 
   return (
     <>
