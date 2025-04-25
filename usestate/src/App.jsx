@@ -11,13 +11,13 @@ function App() {
 
   const handleSubmit = (e)=>{
     e.preventDefault();
-
+    setInput('');
     setName(input)
   }
 
   return (
     <>
-      <User handleChange = {handleChange} handleSubmit = {handleSubmit} name={name}/>
+      <User handleChange = {handleChange} handleSubmit = {handleSubmit} name={name} input={input}/>
     </>
   )
 }
