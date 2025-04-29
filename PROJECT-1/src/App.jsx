@@ -2,26 +2,28 @@ import React, { useEffect, useState } from 'react'
 import Hello from './Component/Hello';
 
 const App = () => {
+
   const [count, setCount] = useState(0);
   const [display, setDisplay] = useState(false)
+
 
   useEffect(() => {
       console.log("Component Mounting")
   }, [])
 
+
   useEffect(()=>{
     console.log("Component Updating")
   },[count])
+
   
-  useEffect(() => {
-    return () => {
-      console.log("Component Unmount")
-    }
-  }, [])
+ 
+
 
   const handleChange = ()=>{
     return setCount(count + 1)
   }
+
 
   const handleDisplay = ()=>{
     return setDisplay(true)

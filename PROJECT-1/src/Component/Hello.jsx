@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react';
 
 const Hello = () => {
-    
-  return (
-    <>
-      <h3>Hello</h3>
-    </>
-  )
-}
+  useEffect(() => {
+    console.log("Hello Component Mounting");
 
-export default Hello
+    return () => {
+      console.log("Hello Component Unmounting");
+    };
+  }, []);
+
+  return <h3>Hello Component</h3>;
+};
+
+export default Hello;
