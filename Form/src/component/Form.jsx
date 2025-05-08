@@ -6,7 +6,7 @@ const Form = () => {
 
     const handleChange = (e)=>{
         const {name,value} = e.target;
-        let newUser = {...user,[name]:value,id}
+        let newUser = {...user,[name]:value}
         setUser(newUser);
     }
 
@@ -14,13 +14,18 @@ const Form = () => {
         e.preventDefault()
         const id = Date.now()
         setList([...list,{...user,id}]);
-        setUser({})
+        setUser({});
     }
+
     const handleDelete = (id)=>{
       let data = list.filter((data)=> data.id !== id)
       setList(data)
     }
-    console.log(user)
+
+    const handleEdit = (id)=>{
+      let data = list.filter((data,idx)=> user.id == id)[0]
+      setUser(data)
+    }
 
   return (
     <>
@@ -81,8 +86,8 @@ const Form = () => {
                       <td>{ele.email}</td>
                       <td>{ele.password}</td>
                       <td>
-                        <button onClick={()=>handleDelete(idx)} className='btn btn-danger me-2'>Delete</button>
-                        <button className='btn btn-warning'>Edit</button>
+                        <button onClick={()=>handleDelete(ele.id)} className='btn btn-danger me-2'>Delete</button>
+                        <button onClick={()=>handleEdit(ele.id)} className='btn btn-warning'>Edit</button>
                       </td>
                     </tr>
                 )
