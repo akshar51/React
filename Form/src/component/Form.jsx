@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 const Form = () => {
     const [user, setUser] = useState({});
-    const [list, setList] = useState([])
+    const [list, setList] = useState([]);
+    const btnRef = useRef();
 
     const handleChange = (e)=>{
         const {name,value} = e.target;
@@ -23,8 +24,9 @@ const Form = () => {
     }
 
     const handleEdit = (id)=>{
-      let data = list.filter((data,idx)=> user.id == id)[0]
+      let data = list.filter((data,idx)=> data.id == id)[0]
       setUser(data)
+      btnRef.current.innerText = "Update";
     }
 
   return (
@@ -63,7 +65,7 @@ const Form = () => {
         name='password'
         value={user.password || ""} />
       </div>
-      <button type="submit" className="btn btn-primary">Submit</button>
+      <button ref={btnRef} type="submit" className="btn btn-primary">Submit</button>
       </form>
         </div>
         <table className="table table-bordered mt-5">
