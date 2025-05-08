@@ -6,16 +6,21 @@ const Form = () => {
 
     const handleChange = (e)=>{
         const {name,value} = e.target;
-        let newUser = {...user,[name]:value}
+        let newUser = {...user,[name]:value,id}
         setUser(newUser);
     }
 
     const handleSubmit = (e)=>{
         e.preventDefault()
-        setList([...list,user]);
+        const id = Date.now()
+        setList([...list,{...user,id}]);
         setUser({})
-        console.log(user)
     }
+    const handleDelete = (id)=>{
+      let data = list.filter((data)=> data.id !== id)
+      setList(data)
+    }
+    console.log(user)
 
   return (
     <>
@@ -46,7 +51,7 @@ const Form = () => {
 
       <div className="mb-3">
         <label htmlFor="password" className="form-label">Password</label>
-        <input type="text" 
+        <input type="password" 
         onChange={handleChange} 
         className="form-control" 
         id="password" 
@@ -76,7 +81,8 @@ const Form = () => {
                       <td>{ele.email}</td>
                       <td>{ele.password}</td>
                       <td>
-                        <button className='btn btn-danger'>Delete</button>
+                        <button onClick={()=>handleDelete(idx)} className='btn btn-danger me-2'>Delete</button>
+                        <button className='btn btn-warning'>Edit</button>
                       </td>
                     </tr>
                 )
