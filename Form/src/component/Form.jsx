@@ -3,7 +3,10 @@ import React, { useRef, useState } from 'react'
 const Form = () => {
     const [user, setUser] = useState({});
     const [list, setList] = useState([]);
+    const [editIdx, setEditIdx] = useState(-1)
     const btnRef = useRef();
+    const inputRef = useRef();
+    
 
     const handleChange = (e)=>{
         const {name,value} = e.target;
@@ -14,8 +17,21 @@ const Form = () => {
     const handleSubmit = (e)=>{
         e.preventDefault()
         const id = Date.now()
-        setList([...list,{...user,id}]);
+
+        if(editIdx == -1){
+          setList([...list,{...user,id}]);
+        }
+        else{
+          let arr = list.map((val)=>{
+              return val.id === editIdx ? {...user} : val
+          })
+          setList(arr)
+          setEditIdx(-1)
+          btnRef.current.innerText = "Submit";
+        }
+
         setUser({});
+        inputRef.current.focus();
     }
 
     const handleDelete = (id)=>{
@@ -26,6 +42,7 @@ const Form = () => {
     const handleEdit = (id)=>{
       let data = list.filter((data,idx)=> data.id == id)[0]
       setUser(data)
+      setEditIdx(id)
       btnRef.current.innerText = "Update";
     }
 
@@ -43,7 +60,8 @@ const Form = () => {
         className="form-control" 
         id="username" 
         name='username'
-        value={user.username || ""} />
+        value={user.username || ""} 
+        ref={inputRef}/>
       </div>
 
       <div className="mb-3">
