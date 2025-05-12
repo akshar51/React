@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 const Form = () => {
     const [user, setUser] = useState({});
@@ -6,7 +6,17 @@ const Form = () => {
     const [editIdx, setEditIdx] = useState(-1)
     const btnRef = useRef();
     const inputRef = useRef();
+  
+    useEffect(()=>{
+      const stored = JSON.parse(localStorage.getItem("user")) || []
+      setList(stored)
+    },[])
+
+    useEffect(() => {
+       localStorage.setItem("user",JSON.stringify(list))
+    }, [list]);
     
+
 
     const handleChange = (e)=>{
         const {name,value} = e.target;
@@ -23,16 +33,18 @@ const Form = () => {
         }
         else{
           let arr = list.map((val)=>{
-              return val.id === editIdx ? {...user} : val
+              return val.id === editIdx ? {...user,id:editIdx} : val
           })
           setList(arr)
           setEditIdx(-1)
           btnRef.current.innerText = "Submit";
         }
-
+        
+        localStorage.setItem("user",JSON.stringify(list))
         setUser({});
         inputRef.current.focus();
     }
+
 
     const handleDelete = (id)=>{
       let data = list.filter((data)=> data.id !== id)
@@ -83,6 +95,20 @@ const Form = () => {
         name='password'
         value={user.password || ""} />
       </div>
+
+    <div className="mb-3">
+      <label htmlFor="hobby" className="form-label">Hobby :</label>
+    <div className="form-check form-check-inline ms-3">
+      <label className="form-check-label" htmlFor="hobby1">Read</label>
+      <input className="form-check-input" type="checkbox" name="hobby" id="hobby1" />
+    </div>
+    <div className="form-check form-check-inline">
+      <label className="form-check-label" htmlFor="hobby2">Gaming</label>
+      <input className="form-check-input" type="checkbox" name="hobby" id="hobby2" />
+    </div>
+    </div>
+
+
       <button ref={btnRef} type="submit" className="btn btn-primary">Submit</button>
       </form>
         </div>
@@ -93,6 +119,7 @@ const Form = () => {
               <th>Username</th>
               <th>Email</th>
               <th>Password</th>
+              <th>Hobby</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -105,6 +132,7 @@ const Form = () => {
                       <td>{ele.username}</td>
                       <td>{ele.email}</td>
                       <td>{ele.password}</td>
+                      <td>{ele.hobby}</td>
                       <td>
                         <button onClick={()=>handleDelete(ele.id)} className='btn btn-danger me-2'>Delete</button>
                         <button onClick={()=>handleEdit(ele.id)} className='btn btn-warning'>Edit</button>
