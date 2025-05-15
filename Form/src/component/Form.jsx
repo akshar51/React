@@ -3,25 +3,28 @@ import React, { useEffect, useRef, useState } from 'react'
 const Form = () => {
     const [user, setUser] = useState({});
     const [list, setList] = useState([]);
+    const [editUser, setEditUser] = useState({});
     const [editIdx, setEditIdx] = useState(-1)
     const btnRef = useRef();
     const inputRef = useRef();
   
-    useEffect(()=>{
+     useEffect(()=>{
       const stored = JSON.parse(localStorage.getItem("user")) || []
       setList(stored)
     },[])
 
-    useEffect(() => {
-       localStorage.setItem("user",JSON.stringify(list))
-    }, [list]);
-    
-
 
     const handleChange = (e)=>{
-        const {name,value} = e.target;
+      const {name,value} = e.target;
+
+      if(editIdx !== -1){
+        let newUser = {...editUser,[name]:value};
+        setEditUser(newUser)
+      }
+      else{
         let newUser = {...user,[name]:value}
         setUser(newUser);
+      }
     }
 
     const handleSubmit = (e)=>{
@@ -29,18 +32,19 @@ const Form = () => {
         const id = Date.now()
 
         if(editIdx == -1){
-          setList([...list,{...user,id}]);
+          let newList = [...list,{...user,id}]
+          setList(newList);
+          localStorage.setItem("user",JSON.stringify(newList))
         }
         else{
           let arr = list.map((val)=>{
               return val.id === editIdx ? {...user,id:editIdx} : val
           })
           setList(arr)
+          localStorage.setItem("user",JSON.stringify(arr))
           setEditIdx(-1)
           btnRef.current.innerText = "Submit";
         }
-        
-        localStorage.setItem("user",JSON.stringify(list))
         setUser({});
         inputRef.current.focus();
     }
@@ -48,16 +52,20 @@ const Form = () => {
 
     const handleDelete = (id)=>{
       let data = list.filter((data)=> data.id !== id)
+      localStorage.setItem("user",JSON.stringify(data))
       setList(data)
     }
 
     const handleEdit = (id)=>{
       let data = list.filter((data,idx)=> data.id == id)[0]
       setUser(data)
+      setEditUser(data)
       setEditIdx(id)
       btnRef.current.innerText = "Update";
     }
 
+
+    
   return (
     <>
     <div className="container">
@@ -96,18 +104,6 @@ const Form = () => {
         value={user.password || ""} />
       </div>
 
-    <div className="mb-3">
-      <label htmlFor="hobby" className="form-label">Hobby :</label>
-    <div className="form-check form-check-inline ms-3">
-      <label className="form-check-label" htmlFor="hobby1">Read</label>
-      <input className="form-check-input" type="checkbox" name="hobby" id="hobby1" />
-    </div>
-    <div className="form-check form-check-inline">
-      <label className="form-check-label" htmlFor="hobby2">Gaming</label>
-      <input className="form-check-input" type="checkbox" name="hobby" id="hobby2" />
-    </div>
-    </div>
-
 
       <button ref={btnRef} type="submit" className="btn btn-primary">Submit</button>
       </form>
@@ -119,7 +115,6 @@ const Form = () => {
               <th>Username</th>
               <th>Email</th>
               <th>Password</th>
-              <th>Hobby</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -132,11 +127,10 @@ const Form = () => {
                       <td>{ele.username}</td>
                       <td>{ele.email}</td>
                       <td>{ele.password}</td>
-                      <td>{ele.hobby}</td>
                       <td>
                         <button onClick={()=>handleDelete(ele.id)} className='btn btn-danger me-2'>Delete</button>
-                        <button onClick={()=>handleEdit(ele.id)} className='btn btn-warning'>Edit</button>
                       </td>
+                        
                     </tr>
                 )
               })
