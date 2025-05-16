@@ -23,6 +23,8 @@ const App = () => {
         newCount = newCount.filter((item)=> item != value)
       }
       setCount(newCount)
+      setEmployee(prev => ({ ...prev, count: newCount }));
+      return;
     }
   
     let data = {...employee,[name]:value};
@@ -63,6 +65,7 @@ const App = () => {
     let data = empData.filter((val,idx)=>val.id === id)[0]
     setEmployee(data);
     setEditIdx(id)
+    setCount(data.count)
     btnSubmit.current.classList.remove("btn-primary")
     btnSubmit.current.classList.add("btn-success")
     btnSubmit.current.innerText = "Update";
@@ -154,7 +157,7 @@ const App = () => {
                       name="gender"
                       value="Male"
                       onChange={handleChange}
-                      checked={employee.gender || false} 
+                      checked={employee.gender == "Male"} 
                       id="male" />
                       <label className="form-check-label" htmlFor="radioDefault1">
                         Male
@@ -167,7 +170,7 @@ const App = () => {
                       name="gender"
                       value="Female"
                       onChange={handleChange}
-                      checked={employee.gender || false} 
+                      checked={employee.gender == "Female"} 
                       id="female" 
                       />
                       <label className="form-check-label" htmlFor="radioDefault2">
@@ -204,7 +207,7 @@ const App = () => {
               </form>
           </div>
         </div>
-        <div className="row">
+        <div className="row mb-5">
           <div className="col-md-10 mx-auto">
             <table className='table caption-top'>
               <caption className='text-white mt-4 fs-3'>Employee Data</caption>
