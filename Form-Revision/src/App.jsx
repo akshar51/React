@@ -1,13 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 const App = () => {
 
   const [employee, setEmployee] = useState({});
   const [empData, setEmpData] = useState([]);
   const [count, setCount] = useState([]);
+  const [editIdx,setEditIdx] = useState(null)
+  const btnSubmit = useRef();
+  const eName = useRef()
+
   
-  
-  
+
   const handleChange = (e)=>{
     const {name,value,checked} = e.target
 
@@ -21,17 +24,34 @@ const App = () => {
       }
       setCount(newCount)
     }
-
+  
     let data = {...employee,[name]:value};
     setEmployee(data);
   }
 
   const handleSubmit =(e)=>{
     e.preventDefault();
-    let data = [...empData,{...employee,id:Date.now()}];
-    setEmpData(data)
+
+    if(editIdx === null ){
+      let data = [...empData,{...employee,id:Date.now()}];
+      setEmpData(data) 
+    }
+    else{
+      let Editdata = empData.map((item)=>{
+        if(editIdx == item.id){
+          item = employee
+        }
+        return item;
+      })
+      setEmpData(Editdata);
+      setEditIdx(null)
+      btnSubmit.current.classList.remove("btn-success")
+      btnSubmit.current.innerText = "Submit";
+      btnSubmit.current.classList.add("btn-primary")
+    }
     setEmployee({});
     setCount([])
+    eName.current.focus();
   }
 
   const handleDelete = (id)=>{
@@ -42,6 +62,11 @@ const App = () => {
   const handleEdit = (id)=>{
     let data = empData.filter((val,idx)=>val.id === id)[0]
     setEmployee(data);
+    setEditIdx(id)
+    btnSubmit.current.classList.remove("btn-primary")
+    btnSubmit.current.classList.add("btn-success")
+    btnSubmit.current.innerText = "Update";
+    eName.current.focus();
   }
 
   return (
@@ -55,6 +80,7 @@ const App = () => {
                 <div className="mb-3">
                   <label htmlFor="ename" className="form-label">Employee Name :</label>
                   <input type="text"
+                  ref={eName}
                   onChange={handleChange}
                   name='ename'
                   value={employee.ename || ""} 
@@ -119,7 +145,7 @@ const App = () => {
 
                   </div>
                 </div>
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <button type="submit" ref={btnSubmit} className="btn btn-primary">Submit</button>
               </form>
           </div>
         </div>
@@ -145,7 +171,7 @@ const App = () => {
                           <td>{idx + 1}</td>
                           <td>{ename}</td>
                           <td>{salary}</td>
-                          <td>{val.count.toString()}</td>
+                          <td>{val.count ? val.count.toString() : []}</td>
                           <td>
                             <button onClick={()=>handleDelete(id)} className='btn btn-danger me-2'>Delete</button>
                             <button onClick={()=>handleEdit(id)} className='btn btn-warning'>Edit</button>
