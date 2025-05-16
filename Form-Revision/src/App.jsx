@@ -145,12 +145,67 @@ const App = () => {
 
                   </div>
                 </div>
+
+                <div className="mb-3">
+                  <label className='form-label me-2' htmlFor="Gender">Gender : </label>
+                    <div className="form-check form-check-inline">
+                      <input className="form-check-input" 
+                      type="radio" 
+                      name="gender"
+                      value="Male"
+                      onChange={handleChange}
+                      checked={employee.gender || false} 
+                      id="male" />
+                      <label className="form-check-label" htmlFor="radioDefault1">
+                        Male
+                      </label>
+                    </div>
+
+                    <div className="form-check form-check-inline">
+                      <input className="form-check-input" 
+                      type="radio" 
+                      name="gender"
+                      value="Female"
+                      onChange={handleChange}
+                      checked={employee.gender || false} 
+                      id="female" 
+                      />
+                      <label className="form-check-label" htmlFor="radioDefault2">
+                        Female
+                      </label>
+                    </div>
+                </div>
+
+                <div className="mb-3">
+                    <select 
+                    name='city' 
+                    onChange={handleChange} 
+                    className="form-select"
+                    value={employee.city || ""}
+                    >
+                      <option disabled={employee.city && true} selected>---Select City---</option>
+                      <option selected={employee.city ? true : false} value="Navsari">Navsari</option>
+                      <option selected={employee.city ? true : false} value="Mumbai">Mumbai</option>
+                      <option selected={employee.city ? true : false} value="Daman">Daman</option>
+                    </select>
+                </div>
+
+                <div className="mb-3">
+                  <textarea
+                  className='w-100 p-3 rounded' 
+                  name="address" 
+                  id="address"
+                  value={employee.address || ""}
+                  onChange={handleChange} 
+                  placeholder='Enter your address'></textarea>
+                </div>
+
                 <button type="submit" ref={btnSubmit} className="btn btn-primary">Submit</button>
               </form>
           </div>
         </div>
         <div className="row">
-          <div className="col-md-6 mx-auto">
+          <div className="col-md-10 mx-auto">
             <table className='table caption-top'>
               <caption className='text-white mt-4 fs-3'>Employee Data</caption>
               <thead>
@@ -159,19 +214,25 @@ const App = () => {
                   <th>E-name</th>
                   <th>Salary</th>
                   <th>Count</th>
+                  <th>Gender</th>
+                  <th>City</th>
+                  <th>Address</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
                   {
                     empData.map((val,idx)=>{
-                      const {ename,salary,id} = val
+                      const {ename,salary,id,gender,city,address} = val
                       return(
                         <tr key={idx}>
                           <td>{idx + 1}</td>
                           <td>{ename}</td>
                           <td>{salary}</td>
                           <td>{val.count ? val.count.toString() : []}</td>
+                          <td>{gender}</td>
+                          <td>{city}</td>
+                          <td>{address}</td>
                           <td>
                             <button onClick={()=>handleDelete(id)} className='btn btn-danger me-2'>Delete</button>
                             <button onClick={()=>handleEdit(id)} className='btn btn-warning'>Edit</button>
