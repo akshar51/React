@@ -6,7 +6,10 @@ const App = () => {
   
   const [hover, setHover] = useState(0);
   const [star, setStar] = useState(0);
+  const [feedback, setFeedback] = useState({});
+  const [list,setList] = useState([]);
   
+  // FOR HOVERING OVER STAR
   const handleHover =(idx)=>{
     setHover(idx)
 
@@ -15,15 +18,32 @@ const App = () => {
     }
   }
 
+  // FOR LEAVE STAR 
   const handleLeave = (idx)=>{
     setHover(0);
     setStar(idx)
   }
 
+  // FOR SELECTING STAR ON CLICK
   const handleDown = (idx)=>{
     setStar(idx)
   }
 
+
+  // PUSHING IN OBJECT
+  const handleChange = (e)=>{
+    const {name,value} = e.target;
+    let data = {...feedback,[name]:value}
+    setFeedback(data)
+  }
+
+  const handleSubmit = (e)=>{
+    e.preventDefault();
+    let data = [...list,{...feedback,stars : star}]
+    setList(data)
+    setFeedback({});
+    setStar(0);
+  }
 
   return (
     <>
@@ -31,7 +51,7 @@ const App = () => {
       <div className="row">
         <div className="col-md-6 mx-auto mt-5">
           <h1 className='text-center'>Feedback</h1>
-          <form action="" className='text-center'>
+          <form method='post' className='text-center' onSubmit={handleSubmit}>
              {
               [...Array(5).keys().map((val,idx)=>(
                 <FaStar
@@ -45,7 +65,13 @@ const App = () => {
               ))]
             }
             <br />
-            <textarea name="msg" id="msg" className='mt-3'></textarea>
+            <textarea 
+            name="msg" 
+            id="msg" 
+            className='mt-3'
+            value={feedback.msg || ""}
+            onChange={handleChange}>
+            </textarea>
             <br />
             <button className='btn btn-primary mt-3'>Submit</button>
           </form>
@@ -53,11 +79,28 @@ const App = () => {
               <thead>
                 <tr>
                   <th>Sr No</th>
+                  <th>Feedback</th>
                   <th>Rating</th>
                 </tr>
               </thead>
               <tbody>
-
+                {
+                  list.map((value,index)=>(
+                    <tr>
+                      <td>{index + 1}</td>
+                      <td>{value.msg}</td>
+                      <td>
+                        {
+                          [...Array(5).keys().map((val,idx)=>(
+                              <FaStar
+                              color={value.stars > idx ? "gold" : "gray" }
+                              size={20}/>
+                          ))]
+                        }
+                      </td>
+                    </tr>
+                  ))
+                }
               </tbody>
             </table>
         </div>
