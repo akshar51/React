@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createUser, deleteUser} from "../features/user/userSlice";
+import { createUser, deleteUser,setEditIdx} from "../features/user/userSlice";
 
 const Table = () => {
 
@@ -11,6 +11,9 @@ const Table = () => {
     dispatch(deleteUser(id))
    }
 
+   function handleEdit(val,idx){
+    dispatch(setEditIdx({index : idx,data : val}))
+   }
    
 
   return (
@@ -35,7 +38,7 @@ const Table = () => {
                       <td>{val.email}</td>
                       <td>{val.password}</td>
                       <td>
-                        <button className="btn btn-warning me-1" >Edit</button>
+                        <button className="btn btn-warning me-1" onClick={()=>handleEdit(val,idx)}>Edit</button>
                         <button className="btn btn-danger me-1" onClick={()=>handleDelete(idx)}>Delete</button>
                       </td>
                     </tr>

@@ -1,11 +1,17 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { createUser } from "../features/user/userSlice";
 
 const Form = () => {
-
+  
     const [obj, setObj] = useState({});
     const dispatch = useDispatch()
+    const {editData} = useSelector(state => state.user)
+    
+    useEffect(() => {
+      setObj({...editData})
+    }, [editData]);
+    
 
     const handleChange = (e)=>{
         let {name,value} = e.target;
@@ -14,12 +20,11 @@ const Form = () => {
     }
 
 
-    const handleSubmit = (e)=>{
-        e.preventDefault();
-        dispatch(createUser(obj))
-        setObj({})
-    }
-    
+const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(createUser(obj));
+    setObj({});
+};
 
 
   return (
