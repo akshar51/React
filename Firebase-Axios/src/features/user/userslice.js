@@ -27,6 +27,7 @@ const userSlice = createSlice({
         //fetch
         builder.addCase(fetchUser.pending,(state)=>{
             state.loading = true;
+            state.error = null;
         })
         builder.addCase(fetchUser.fulfilled,(state,action)=>{
             state.loading = false;

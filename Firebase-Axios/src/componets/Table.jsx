@@ -27,9 +27,9 @@ const Table = () => {
               <tbody>
                 {
                     user.map((item,idx)=>{
-                        const { email , password } = item;
+                        const { email , password , id } = item;
                         return(
-                            <tr key={idx}>
+                            <tr key={id}>
                                 <td>{idx + 1}</td>
                                 <td>{email}</td>
                                 <td>{password}</td>
