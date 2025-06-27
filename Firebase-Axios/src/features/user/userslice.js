@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createUser } from "./thunk";
+import { createUser, fetchUser } from "./thunk";
 
 const initialState = {
     user : [],
@@ -23,6 +23,25 @@ const userSlice = createSlice({
             state.loading = false;
             state.error = action.error.message;
         })
+
+        //fetch
+        builder.addCase(fetchUser.pending,(state)=>{
+            state.loading = true;
+        })
+        builder.addCase(fetchUser.fulfilled,(state,action)=>{
+            state.loading = false;
+            let newData = [];
+            let data = action.payload;
+            for(let key in data){
+                newData.push({...data[key], id : key})
+            }
+            state.user = newData;
+        })
+        builder.addCase(fetchUser.rejected,(state,action)=>{
+            state.loading = false;
+            state.error = action.error.message
+        })
+
     }
 })
 

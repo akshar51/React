@@ -9,7 +9,7 @@ const firebaseConfig = {
   storageBucket: "setup-3b371.firebasestorage.app",
   messagingSenderId: "951243757402",
   appId: "1:951243757402:web:ea578297368ada21b6c563",
-  datadatabaseURL : "https://setup-3b371-default-rtdb.firebaseio.com/",
+  // databaseURL : "https://setup-3b371-default-rtdb.firebaseio.com/",
 };
 
 

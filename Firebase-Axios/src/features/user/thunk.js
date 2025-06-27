@@ -9,3 +9,12 @@ export const createUser = createAsyncThunk('user/createUser',async (user,{reject
         return rejectWithValue(error.message)
     }
 })
+
+export const fetchUser = createAsyncThunk('user/fetchUser', async (_,{rejectWithValue})=>{
+    try {
+        let res = await axiosInstance.get('/.json');
+        return res.data
+    } catch (error) {
+        return rejectWithValue(error.message)
+    }
+})
