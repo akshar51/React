@@ -48,7 +48,9 @@ const Table = () => {
                   loading ? 
                   <>
                     <tr>
-                      <h2 className="text-center">Loading Data . . . </h2>
+                      <td>
+                        <h2 className="text-center" colSpan="4">Loading Data . . . </h2>
+                      </td>
                     </tr>
                   </> 
                   :
@@ -59,8 +61,12 @@ const Table = () => {
                                 <td>{idx + 1}</td>
                                 <td>{email}</td>
                                 <td>
-                                  <input disabled type={viewIdx !== idx ? 'password': 'text'} value={password} className="me-3" />
-                                  {viewIdx !== idx ? <IoEyeOutline onClick={()=>handleEye(-1)}/> : <FaEyeSlash />}
+                                  <input 
+                                  disabled 
+                                  type={viewIdx !== idx ? 'password': 'text'} 
+                                  value={password} 
+                                  className="me-3" />
+                                  {viewIdx !== idx ? (<IoEyeOutline onClick={()=>handleEye(idx)}/>) : (<FaEyeSlash onClick={()=>handleEye(-1)}/>)}
                                 </td>
                                 <td>
                                     <button className="btn btn-warning me-1" onClick={()=>handleEdit(id)}>Edit</button>
