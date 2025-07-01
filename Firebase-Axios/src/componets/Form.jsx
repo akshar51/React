@@ -1,8 +1,10 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { createUser } from "../features/user/thunk";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { createUser, updateUser } from "../features/user/thunk";
 
 const Form = () => {
+
+  const {editData,editIdx} = useSelector(state => state.user)
   const dispatch = useDispatch();
   const [obj, setobj] = useState({});
 
@@ -12,8 +14,20 @@ const Form = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createUser(obj));
+
+    if(editIdx === null){
+      dispatch(createUser(obj));
+    }
+    else{
+      dispatch(updateUser({ id: editIdx, updatedUser: obj }))
+    }
+    setobj({})
   };
+
+  useEffect(() => {
+    setobj({...editData})
+  }, [editData]);
+  
 
   return (
     <>

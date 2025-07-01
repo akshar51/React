@@ -28,10 +28,10 @@ export const deleteUser = createAsyncThunk('user/deleteUser', async (id,{rejectW
     }
 })
 
-export const updateUser = createAsyncThunk('user/updateUser', async ({updatedUser,id},{rejectWithValue})=>{
+export const updateUser = createAsyncThunk('user/updateUser', async ({id,updatedUser},{rejectWithValue})=>{
     try {
         await axiosInstance.put(`/${id}.json`,updatedUser);// /.json is root 
-        return {id,updateUser}
+        return {id,updatedUser}
     } catch (error) {
         return rejectWithValue(error.message)
     }

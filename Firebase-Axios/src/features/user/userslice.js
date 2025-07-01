@@ -1,15 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createUser, deleteUser, fetchUser } from "./thunk";
+import { createUser, deleteUser, fetchUser, updateUser } from "./thunk";
 
 const initialState = {
     user : [],
     loading : false,
     error : null,
+    editData : {},
+    editIdx : null,
 }
 
 const userSlice = createSlice({
     name : "user",
     initialState,
+    reducers : {
+        // set edit data and id
+        setEditIdx : (state,action)=>{
+            state.editData = action.payload.item,
+            state.editIdx = action.payload.id
+        }
+    },
     extraReducers : (builder)=>{
         
         builder.addCase(createUser.pending,(state)=>{
@@ -58,8 +67,31 @@ const userSlice = createSlice({
             state.error = action.error.message // action is a object --> in which error is obj and has message
         })
 
+        // Edit
+        builder.addCase(updateUser.pending,(state)=>{
+            state.loading = true;
+            state.error = null;
+        })
+        builder.addCase(updateUser.fulfilled,(state,action)=>{
+            state.loading = false;
+            const {id,updatedUser} = action.payload;
+
+            state.user = state.user.map((item)=>{
+                if(item.id === id){
+                    return {...updatedUser, id}
+                }
+                return item;
+            })
+            state.editData = {};
+            state.editIdx = null;
+        })
+        builder.addCase(updateUser.rejected,(state,action)=>{
+            state.loading = false;
+            state.error = action.error.message
+        })
+
 
     }
 })
-
+export const {setEditIdx} = userSlice.actions
 export default userSlice.reducer;

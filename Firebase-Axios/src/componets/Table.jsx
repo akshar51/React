@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteUser, fetchUser, updateUser } from "../features/user/thunk";
 import { IoEyeOutline } from "react-icons/io5";
 import { FaEyeSlash } from "react-icons/fa";
+import { setEditIdx } from "../features/user/userslice";
 
 const Table = () => {
 
@@ -20,8 +21,8 @@ const Table = () => {
       dispatch(deleteUser(id))
     }
 
-    const handleEdit = (id)=>{
-      dispatch(updateUser(id))
+    const handleEdit = (id,item)=>{
+      dispatch(setEditIdx({id,item}))
     }
 
     const handleEye = (id)=>{
@@ -69,7 +70,7 @@ const Table = () => {
                                   {viewIdx !== idx ? (<IoEyeOutline onClick={()=>handleEye(idx)}/>) : (<FaEyeSlash onClick={()=>handleEye(-1)}/>)}
                                 </td>
                                 <td>
-                                    <button className="btn btn-warning me-1" onClick={()=>handleEdit(id)}>Edit</button>
+                                    <button className="btn btn-warning me-1" onClick={()=>handleEdit(id,item)}>Edit</button>
                                     <button className="btn btn-danger me-1" onClick={()=>handleDelete(id)}>Delete</button>
                                 </td>
                             </tr>
